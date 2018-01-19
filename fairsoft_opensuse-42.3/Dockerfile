@@ -33,9 +33,6 @@ RUN ln -s /usr/bin/gcc-7 /usr/bin/gcc \
  && ln -s /usr/bin/g++-7 /usr/bin/g++ \
  && ln -s /usr/bin/gfortran-7 /usr/bin/gfortran
 
-## If you need to overwrite a specific package version, do:
-#ENV FLATBUFFERS_BRANCH=v1.7.1
-
 RUN sed -i 's/compiler=/compiler=gcc/' automatic.conf \
  && sed -i 's/build_root6=no/build_root6=yes/' automatic.conf \
  && sed -i 's|SIMPATH_INSTALL=$PWD/installation|SIMPATH_INSTALL=/fairsoft|' automatic.conf
