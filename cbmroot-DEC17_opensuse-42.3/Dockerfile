@@ -22,16 +22,21 @@ RUN zypper --non-interactive in \
   libX11-devel libXext-devel libXft-devel libXpm-devel \
   cmake which unzip make autoconf automake libcurl4 openssl libssl43 libtool libcurl-devel freeglut-devel libopenssl-devel patch
 
-# Let's use gcc v6:
+## Let's use gcc v7:
 RUN zypper --non-interactive rm \
   gcc gcc-c++ gcc-fortran
 RUN zypper --non-interactive in \
-  gcc6 gcc6-c++ gcc6-fortran
-ENV CC=/usr/bin/gcc-6
-ENV CXX=/usr/bin/g++-6
-RUN ln -s /usr/bin/gcc-6 /usr/bin/gcc \
- && ln -s /usr/bin/g++-6 /usr/bin/g++ \
- && ln -s /usr/bin/gfortran-6 /usr/bin/gfortran
+  gcc7 gcc7-c++ gcc7-fortran
+ENV CC=/usr/bin/gcc-7
+ENV CXX=/usr/bin/g++-7
+RUN ln -s /usr/bin/gcc-7 /usr/bin/gcc \
+ && ln -s /usr/bin/g++-7 /usr/bin/g++ \
+ && ln -s /usr/bin/gfortran-7 /usr/bin/gfortran
+
+# fix known issue with flatbuffers v1.6.0 by using 1.7.1 instead
+ENV FSOFTVER=mar17 ROOTVER=6
+RUN cd .. && git clone https://github.com/FairRootGroup/FairSoft fairsoft_src_${FSOFTVER}_root${ROOTVER}
+RUN sed -i 's/FLATBUFFERS_BRANCH=v1.6.0/FLATBUFFERS_BRANCH=v1.7.1/' /cbmroot_DEC17/fairsoft_src_${FSOFTVER}_root${ROOTVER}/scripts/package_versions.sh
 
 RUN ./autoinstall_framework.sh 1
 #./autoinstall_framework.sh 0 1
