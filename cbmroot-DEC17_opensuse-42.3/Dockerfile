@@ -16,10 +16,10 @@ RUN zypper --non-interactive install \
 
 RUN mkdir /cbmroot_DEC17
 
-RUN cd /cbmroot_DEC17 && svn co https://subversion.gsi.de/cbmsoft/cbmroot/release/DEC17 cbmroot_svn
+RUN cd /cbmroot_DEC17 && svn co https://subversion.gsi.de/cbmsoft/cbmroot/release/DEC17 cbmroot
 
-WORKDIR /cbmroot_DEC17/cbmroot_svn
-ENV CBMSRCDIR=/cbmroot_DEC17/cbmroot_svn
+WORKDIR /cbmroot_DEC17/cbmroot
+ENV CBMSRCDIR=/cbmroot_DEC17/cbmroot
 
 ## Let's use gcc v7:
 RUN zypper --non-interactive rm \
