@@ -39,9 +39,14 @@ RUN cd .. && git clone https://github.com/FairRootGroup/FairSoft fairsoft_src_${
 RUN sed -i 's/FLATBUFFERS_BRANCH=v1.6.0/FLATBUFFERS_BRANCH=v1.7.1/' /cbmroot_DEC17/fairsoft_src_${FSOFTVER}_root${ROOTVER}/scripts/package_versions.sh
 
 RUN ./autoinstall_framework.sh 1
-#./autoinstall_framework.sh 0 1
-#./autoinstall_framework.sh 0 0 1
-#. build/config.sh
 
-#export SIMPATH=/local/cbmroot_DEC17/fairsoft_may16p1_root6/installation
-#export FAIRROOTPATH=/local/cbmroot_DEC17/fairroot_v-16.06b-fairsoft_may16p1_root6
+# prefer freshly compiled binaries like cmake
+ENV PATH="/cbmroot_DEC17/fairsoft_mar17_root6/installation/bin:${PATH}"
+
+RUN ./autoinstall_framework.sh 0 1
+RUN ./autoinstall_framework.sh 0 0 1
+
+# set all environment variables
+RUN source ./build/config.sh
+ENV SIMPATH=/cbmroot_DEC17/fairsoft_mar17_root6/installation
+ENV FAIRROOTPATH=/cbmroot_DEC17/fairroot_v-17.03a-fairsoft_mar17_root6
