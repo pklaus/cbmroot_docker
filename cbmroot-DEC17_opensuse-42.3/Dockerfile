@@ -2,25 +2,24 @@ FROM opensuse:42.3
 
 RUN zypper ref
 
-RUN zypper --non-interactive in \
-  gcc-c++ git subversion
+RUN zypper --non-interactive install \
+    # List from https://github.com/FairRootGroup/FairSoft/blob/master/DEPENDENCIES
+    cmake gcc gcc-c++ gcc-fortran make patch sed \
+    libX11-devel libXft-devel libXpm-devel libXext-devel \
+    libXmu-devel Mesa-libGL-devel freeglut-devel ncurses-devel \
+    curl libcurl-devel bzip2 libbz2-devel gzip unzip tar \
+    libexpat-devel subversion git flex bison makedepend lsb-release python-devel \
+    libxml2-devel libopenssl-devel krb5-devel wget \
+    libcurl-devel automake autoconf libtool which \
+    # further dependencies
+    zlib
 
 RUN mkdir /cbmroot_DEC17
 
 RUN cd /cbmroot_DEC17 && svn co https://subversion.gsi.de/cbmsoft/cbmroot/release/DEC17 cbmroot_svn
 
-#RUN zypper --non-interactive in python-numpy-devel
-
 WORKDIR /cbmroot_DEC17/cbmroot_svn
 ENV CBMSRCDIR=/cbmroot_DEC17/cbmroot_svn
-
-
-RUN zypper --non-interactive in \
-  wget curl \
-  tar zlib \
-  gcc-fortran \
-  libX11-devel libXext-devel libXft-devel libXpm-devel \
-  cmake which unzip make autoconf automake libcurl4 openssl libssl43 libtool libcurl-devel freeglut-devel libopenssl-devel patch
 
 ## Let's use gcc v7:
 RUN zypper --non-interactive rm \
