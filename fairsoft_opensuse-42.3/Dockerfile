@@ -1,8 +1,6 @@
-FROM opensuse:42.3
+FROM opensuse:42.3 as builder
 
-RUN zypper ref
-
-RUN zypper --non-interactive install \
+RUN zypper ref && zypper --non-interactive install \
     # List from https://github.com/FairRootGroup/FairSoft/blob/master/DEPENDENCIES
     cmake gcc gcc-c++ gcc-fortran make patch sed \
     libX11-devel libXft-devel libXpm-devel libXext-devel \
@@ -15,10 +13,11 @@ RUN zypper --non-interactive install \
     zlib
 
 ARG fairsoft_branch=master
-ENV FAIRSOFT_BRANCH=$branch
-RUN git clone https://github.com/FairRootGroup/FairSoft.git fairsoft_src \
- && cd /fairsoft_src \
- && git checkout $fairsoft_branch
+ENV FAIRSOFT_BRANCH=$fairsoft_branch
+RUN git clone https://github.com/FairRootGroup/FairSoft.git fairsoft_src
+RUN cd /fairsoft_src \
+ && git checkout $fairsoft_branch \
+ && git show
 
 WORKDIR /fairsoft_src
 
@@ -38,6 +37,22 @@ RUN sed -i 's/compiler=/compiler=gcc/' automatic.conf \
  && sed -i 's|SIMPATH_INSTALL=$PWD/installation|SIMPATH_INSTALL=/fairsoft|' automatic.conf
 
 RUN ./configure.sh automatic.conf
+
+FROM opensuse:42.3
+
+RUN zypper ref && zypper --non-interactive install \
+    # List from https://github.com/FairRootGroup/FairSoft/blob/master/DEPENDENCIES
+    cmake gcc gcc-c++ gcc-fortran make patch sed \
+    libX11-devel libXft-devel libXpm-devel libXext-devel \
+    libXmu-devel Mesa-libGL-devel freeglut-devel ncurses-devel \
+    curl libcurl-devel bzip2 libbz2-devel gzip unzip tar \
+    libexpat-devel subversion git flex bison makedepend lsb-release python-devel \
+    libxml2-devel libopenssl-devel krb5-devel wget \
+    libcurl-devel automake autoconf libtool which \
+    # further dependencies
+    zlib
+
+COPY --from=builder /fairsoft /fairsoft
 
 WORKDIR /fairsoft
 
