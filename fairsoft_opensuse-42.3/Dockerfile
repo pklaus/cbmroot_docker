@@ -36,6 +36,15 @@ RUN sed -i 's/compiler=/compiler=gcc/' automatic.conf \
  && sed -i 's/build_root6=no/build_root6=yes/' automatic.conf \
  && sed -i 's|SIMPATH_INSTALL=$PWD/installation|SIMPATH_INSTALL=/fairsoft|' automatic.conf
 
+RUN if [ "$fairsoft_branch" = "mar17" ]; then \
+    # fix known issue with flatbuffers v1.6.0 by using 1.7.1 instead
+    sed -i 's/FLATBUFFERS_BRANCH=v1.6.0/FLATBUFFERS_BRANCH=v1.7.1/' /fairsoft_src/scripts/package_versions.sh; \
+    sed -i 's/MSGPACK_BRANCH=cpp-2.1.1/MSGPACK_BRANCH=cpp-2.1.3/' /fairsoft_src/scripts/package_versions.sh; \
+    fi
+
+RUN cat /fairsoft_src/scripts/package_versions.sh
+#RUN /bin/false
+
 RUN ./configure.sh automatic.conf
 
 FROM opensuse:42.3
