@@ -160,7 +160,11 @@ RUN mkdir build \
  && cd /cbmroot/input \
  && ln -s /fieldmaps/* .
 
-# set all environment variables
-RUN source ./build/config.sh
-
-RUN printenv
+# nicer and Docker-aware prompt in container:
+RUN zypper ref && zypper --non-interactive in ncurses-utils
+ENV TERM xterm-256color
+RUN echo 'PS1="\[$(tput setaf 4)$(tput bold)[\]cbmroot@\\h$:\\w]#\[$(tput sgr0) \]"' >> /root/.bashrc \
+ #  source the CbmRoot Environment on startup:
+ && echo 'source /cbmroot/build/config.sh' >> /root/.bashrc
+RUN ["/bin/bash", "-c", "source $HOME/.bashrc; printenv"]
+ENTRYPOINT ["/bin/bash", "-c"]
