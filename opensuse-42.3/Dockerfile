@@ -124,7 +124,7 @@ LABEL build=fairroot
 
 ENV FAIRROOT_BRANCH=$fairroot_branch
 
-COPY --from=builder /fairroot /fairroot
+COPY --from=fairroot_builder /fairroot /fairroot
 
 WORKDIR /fairroot
 
