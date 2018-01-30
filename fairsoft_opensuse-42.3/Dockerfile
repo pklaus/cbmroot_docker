@@ -78,3 +78,5 @@ WORKDIR /fairsoft
 
 # prefer freshly compiled binaries like cmake
 ENV PATH="/fairsoft/bin:${PATH}"
+
+ENV SIMPATH=/fairsoft

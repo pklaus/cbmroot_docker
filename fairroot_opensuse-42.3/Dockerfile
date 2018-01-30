@@ -1,14 +1,12 @@
 FROM pklaus/fairsoft:opensuse-42.3_mar17 as builder
 
-#RUN zypper ref && zypper --non-interactive install \
-#    htop
-
-ENV SIMPATH=/fairsoft
-
-RUN echo "Setting up FairRoot ..."
+# already set in pklaus/fairsoft:
+#ENV SIMPATH=/fairsoft
 
 ARG fairroot_branch=v-17.03a
 ENV FAIRROOT_BRANCH=$fairroot_branch
+
+RUN echo "Setting up FairRoot ..."
 
 RUN git clone https://github.com/FairRootGroup/FairRoot.git /fairroot_src
 
