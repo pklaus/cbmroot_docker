@@ -1,4 +1,4 @@
-FROM pklaus/fairsoft:opensuse-42.3_mar17
+FROM pklaus/fairsoft:opensuse-42.3_mar17 as builder
 
 #RUN zypper ref && zypper --non-interactive install \
 #    htop
@@ -26,5 +26,14 @@ RUN mkdir build \
     .. \
  && nice make install -j4 \
  && echo done installing FairRoot
+
+# now we start from scratch and carry only the compiled output with us
+FROM pklaus/fairsoft:opensuse-42.3_mar17
+
+ENV FAIRROOT_BRANCH=$fairroot_branch
+
+COPY --from=builder /fairroot /fairroot
+
+WORKDIR /fairroot
 
 ENV FAIRROOTPATH=/fairroot
