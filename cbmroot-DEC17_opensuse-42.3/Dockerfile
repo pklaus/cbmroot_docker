@@ -22,7 +22,7 @@ RUN mkdir build \
     -DCMAKE_CXX_COMPILER=$($SIMPATH/bin/fairsoft-config --cxx) \
     -DCMAKE_C_COMPILER=$($SIMPATH/bin/fairsoft-config --cc) \
     .. \
- && nice make -j4 \
+ && nice make -j8 \
  && cd .. \
  && cd input \
  && ln -s ../../fieldmaps/* .

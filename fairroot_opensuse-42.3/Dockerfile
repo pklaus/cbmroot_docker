@@ -22,7 +22,7 @@ RUN mkdir build \
     -DCMAKE_C_COMPILER=$($SIMPATH/bin/fairsoft-config --cc) \
     -DCMAKE_INSTALL_PREFIX=/fairroot \
     .. \
- && nice make install -j4 \
+ && nice make install -j8 \
  && echo done installing FairRoot
 
 # now we start from scratch and carry only the compiled output with us
