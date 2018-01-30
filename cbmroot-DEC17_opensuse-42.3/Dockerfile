@@ -8,13 +8,13 @@ ENV CBMROOT_RELEASE=$cbmroot_release
 # not needed, already set in pklaus/fairsoft:
 #ENV PATH=$SIMPATH/bin:$PATH
 
-WORKDIR /cbmroot
+WORKDIR /
 
-RUN svn co https://subversion.gsi.de/cbmsoft/cbmroot/release/$CBMROOT_RELEASE ./
-
-RUN echo "Setting up Cbmroot ..."
+RUN svn co https://subversion.gsi.de/cbmsoft/cbmroot/release/$CBMROOT_RELEASE /cbmroot
 
 RUN if [ -d fieldmaps ]; then svn up fieldmaps; else svn co https://subversion.gsi.de/cbmsoft/cbmroot/fieldmaps fieldmaps; fi
+
+WORKDIR /cbmroot
 
 RUN mkdir build \
  && cd build \
@@ -23,11 +23,8 @@ RUN mkdir build \
     -DCMAKE_C_COMPILER=$($SIMPATH/bin/fairsoft-config --cc) \
     .. \
  && nice make -j8 \
- && cd .. \
- && cd input \
- && ln -s ../../fieldmaps/* .
-
-RUN echo done installing CbmRoot
+ && cd /cbmroot/input \
+ && ln -s /fieldmaps/* .
 
 # set all environment variables
 RUN source ./build/config.sh
