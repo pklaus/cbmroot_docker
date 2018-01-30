@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e # fail if any command fails
+
 # build
 time \
    docker build \
