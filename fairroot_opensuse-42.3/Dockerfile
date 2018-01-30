@@ -22,7 +22,7 @@ RUN mkdir build \
  && cmake \
     -DCMAKE_CXX_COMPILER=$($SIMPATH/bin/fairsoft-config --cxx) \
     -DCMAKE_C_COMPILER=$($SIMPATH/bin/fairsoft-config --cc) \
-    -DCMAKE_INSTALL_PREFIX=../../fairroot_$FROOTVER-fairsoft_${FSOFTVER}_root${ROOTVER} \
+    -DCMAKE_INSTALL_PREFIX=/fairroot \
     .. \
  && nice make install -j4 \
  && echo done installing FairRoot
