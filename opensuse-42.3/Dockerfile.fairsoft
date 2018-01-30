@@ -23,9 +23,9 @@ WORKDIR /fairsoft_src
 
 ## Let's use gcc v7:
 RUN zypper --non-interactive rm \
-  gcc gcc-c++ gcc-fortran
+    gcc gcc-c++ gcc-fortran
 RUN zypper --non-interactive in \
-  gcc7 gcc7-c++ gcc7-fortran
+    gcc7 gcc7-c++ gcc7-fortran
 ENV CC=/usr/bin/gcc-7
 ENV CXX=/usr/bin/g++-7
 RUN ln -s /usr/bin/gcc-7 /usr/bin/gcc \
@@ -47,8 +47,21 @@ RUN cat /fairsoft_src/scripts/package_versions.sh
 
 RUN ./configure.sh automatic.conf
 
-FROM opensuse:42.3
 
+# Now we have a compiled version of FairSoft in /fairsoft and the
+# sources which are most likely not needed anymore in /fairsoft_src.
+# To get rid of the /fairsoft_src folder (almost 20G big) we start
+# from scratch and carry only the compiled output in /fairsoft with us:
+FROM opensuse:42.3
+# This makes use of the new multi stage build feature of Docker >= 17.05
+# https://docs.docker.com/engine/userguide/eng-image/multistage-build/
+# The alternatives would be to:
+# * run all commands in one big RUN instruction
+#   (bad as Docker couldn't cache intermediate results)
+# * Separate `RUN rm -r /fairsoft_src` instruction (this would require to build
+#   the image with the experimental --squash argument to save storage space)
+
+# We want the have the same libraries available as before:
 RUN zypper ref && zypper --non-interactive install \
     # List from https://github.com/FairRootGroup/FairSoft/blob/master/DEPENDENCIES
     cmake gcc gcc-c++ gcc-fortran make patch sed \
