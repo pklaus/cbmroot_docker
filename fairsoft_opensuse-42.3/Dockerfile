@@ -61,6 +61,17 @@ RUN zypper ref && zypper --non-interactive install \
     # further dependencies
     zlib
 
+## Let's use gcc v7:
+RUN zypper --non-interactive rm \
+  gcc gcc-c++ gcc-fortran
+RUN zypper --non-interactive in \
+  gcc7 gcc7-c++ gcc7-fortran
+ENV CC=/usr/bin/gcc-7
+ENV CXX=/usr/bin/g++-7
+RUN ln -s /usr/bin/gcc-7 /usr/bin/gcc \
+ && ln -s /usr/bin/g++-7 /usr/bin/g++ \
+ && ln -s /usr/bin/gfortran-7 /usr/bin/gfortran
+
 COPY --from=builder /fairsoft /fairsoft
 
 WORKDIR /fairsoft
