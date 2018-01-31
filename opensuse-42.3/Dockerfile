@@ -75,9 +75,6 @@ FROM base as fairsoft
 #  we throw away /fairsoft_src and only carry /fairsoft
 # -----------------------------------------------------
 
-# We label this stage as fairsoft to tag it later on
-LABEL build=fairsoft
-
 COPY --from=fairsoft_builder /fairsoft /fairsoft
 
 WORKDIR /fairsoft
@@ -120,7 +117,6 @@ FROM fairsoft as fairroot
 # 
 #  we throw away /fairroot_src and only carry /fairroot
 # ----------------------------------
-LABEL build=fairroot
 
 ENV FAIRROOT_BRANCH=$fairroot_branch
 
@@ -134,8 +130,6 @@ FROM fairroot as cbmroot
 # ----------------------------------
 #  Final CbmRoot Image !!!
 # ----------------------------------
-
-LABEL build=cbmroot
 
 ENV CBMSRCDIR=/cbmroot
 
