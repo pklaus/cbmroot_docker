@@ -142,11 +142,9 @@ RUN svn co https://subversion.gsi.de/cbmsoft/cbmroot/release/$CBMROOT_RELEASE /c
 
 RUN if [ -d fieldmaps ]; then svn up fieldmaps; else svn co https://subversion.gsi.de/cbmsoft/cbmroot/fieldmaps fieldmaps; fi
 
-WORKDIR /cbmroot
+WORKDIR /cbmroot/build
 
-RUN mkdir build \
- && cd build \
- && cmake \
+RUN cmake \
     -DCMAKE_CXX_COMPILER=$($SIMPATH/bin/fairsoft-config --cxx) \
     -DCMAKE_C_COMPILER=$($SIMPATH/bin/fairsoft-config --cc) \
     .. \
