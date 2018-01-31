@@ -160,3 +160,6 @@ RUN echo 'PS1="\[$(tput setaf 4)$(tput bold)[\]cbmroot@\\h$:\\w]#\[$(tput sgr0) 
  && echo 'source /cbmroot/build/config.sh' >> /root/.bashrc
 RUN ["/bin/bash", "-c", "source $HOME/.bashrc; printenv"]
 ENTRYPOINT ["/bin/bash", "-c"]
+
+# Default command: start bash. Requires -it as params for `docker run`
+CMD /bin/bash
