@@ -14,6 +14,6 @@ do
 done
 
 # tag
-docker tag fairsoft pklaus/fairsoft:opensuse-15.1_oct17p1
-docker tag fairroot pklaus/fairroot:opensuse-15.1_v-17.10c
-docker tag cbmroot  pklaus/cbmroot:opensuse-15.1_OCT18
+docker tag fairsoft pklaus/fairsoft:opensuse-15.0_oct17p1
+docker tag fairroot pklaus/fairroot:opensuse-15.0_v-17.10c
+docker tag cbmroot  pklaus/cbmroot:opensuse-15.0_OCT18

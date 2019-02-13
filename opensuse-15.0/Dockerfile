@@ -1,4 +1,4 @@
-FROM opensuse/leap:15.1 as base
+FROM opensuse/leap:15.0 as base
 # -----------------------------------------------
 #  Base image containing the dependencies we need
 # -----------------------------------------------
