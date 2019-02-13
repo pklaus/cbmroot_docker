@@ -6,7 +6,7 @@ First, FairSoft is built, then subsequently FairRoot and, finally, CbmRoot.
 
 The resulting images can be found on the Docker Hub. The image hierarchy is as follows:
 
-[opensuse/leap][] → [pklaus/fairsoft][] → [pklaus/fairroot][] → [pklaus/cbmroot][]
+[pklaus/cbmroot][] ← [pklaus/fairroot][] ← [pklaus/fairsoft][] ← [opensuse/leap][]
 
 [pklaus/cbmroot]: https://hub.docker.com/r/pklaus/cbmroot/
 [pklaus/fairroot]: https://hub.docker.com/r/pklaus/fairroot/
