@@ -21,7 +21,7 @@ FROM base as fairsoft_builder
 #  Intermediate(!) image to build FairSoft
 # ----------------------------------------
 
-ARG fairsoft_branch=may18
+ARG fairsoft_branch=oct17p1
 ENV FAIRSOFT_BRANCH=$fairsoft_branch
 RUN git clone https://github.com/FairRootGroup/FairSoft.git fairsoft_src
 RUN cd /fairsoft_src \
@@ -70,7 +70,7 @@ FROM fairsoft as fairroot_builder
 #  Intermediate(!) image to build FairRoot
 # ----------------------------------------
 
-ARG fairroot_branch=v18.0.4
+ARG fairroot_branch=v-17.10c
 ENV FAIRROOT_BRANCH=$fairroot_branch
 
 RUN echo "Setting up FairRoot ..."
