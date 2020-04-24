@@ -119,18 +119,27 @@ ENV FAIRROOTPATH=/fairroot
 # ----------------------------------
 FROM fairroot as cbmroot
 
-ENV CBMSRCDIR=/cbmroot
-
 # use globally defined ARG in this stage's image:
 ARG cbmroot_release
 ARG fairsoft_branch
 ARG fairroot_branch
 
+# change shell used for RUN statements:
+SHELL ["/bin/bash", "-c"]
+
+# CbmRoot source code directory
+ENV CBMSRCDIR=/cbmroot
+
+# make FairSoft / FairRoot / CbmRoot versions available in this final stage image, too:
+ENV FAIRSOFT_BRANCH=$fairsoft_branch
+ENV FAIRROOT_BRANCH=$fairroot_branch
+ENV FAIRSOFT_VERSION=$fairsoft_branch
+ENV FAIRROOT_VERSION=$fairroot_branch
 ENV CBMROOT_RELEASE=$cbmroot_release
 
 WORKDIR /
 
-RUN svn co https://subversion.gsi.de/cbmsoft/cbmroot/trunk /cbmroot
+RUN git clone https://git.cbm.gsi.de/CbmSoft/CbmRoot.git /cbmroot
 
 WORKDIR /cbmroot/build
 
@@ -143,18 +152,13 @@ RUN cmake \
 # nicer and Docker-aware prompt in container:
 RUN zypper ref && zypper --non-interactive in ncurses-utils
 ENV TERM xterm-256color
-RUN echo 'PS1="\[$(tput setaf 4)$(tput bold)[\]cbmroot@\\h$:\\w]#\[$(tput sgr0) \]"' >> /root/.bashrc \
- #  source the CbmRoot Environment on startup:
- && echo 'source /cbmroot/build/config.sh' >> /root/.bashrc
-RUN ["/bin/bash", "-c", "source $HOME/.bashrc; printenv"]
-ENTRYPOINT ["/bin/bash", "-c"]
+RUN echo 'PS1="\[$(tput setaf 4)$(tput bold)[\]cbmroot@\\h$:\\w]#\[$(tput sgr0) \]"' >> /etc/bash.bashrc
+
+# source the CbmRoot Environment on startup:
+#RUN echo 'source /cbmroot/build/config.sh' >> /etc/bash.bashrc
+# OR if we use a login shell (param -l), /etc/profile will be sourced:
+RUN cp /cbmroot/build/config.sh /etc/profile.d/cbmroot.sh
 
 # Default command: start bash. Requires -it as params for `docker run`
-CMD /bin/bash
-
-# make used branches/versions available in this final stage image, too:
-ENV FAIRSOFT_BRANCH=$fairsoft_branch
-ENV FAIRROOT_BRANCH=$fairroot_branch
-
-ENV FAIRSOFT_VERSION=$fairsoft_branch
-ENV FAIRROOT_VERSION=$fairroot_branch
+ENTRYPOINT ["/bin/bash", "-l", "-c"]
+CMD printenv
